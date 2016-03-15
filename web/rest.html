@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<!--
+Copyright 2016 Len Payne <len.payne@lambtoncollege.ca>.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html>
+    <head>        
+    </head>
+    <body ng-app="myApp">
+        <div ng-controller="restCtrl">
+            <p>
+                <input ng-model="item" />
+                <button ng-click="addItem()">Add</button>
+            </p>
+            <ul>
+                <li ng-repeat="todo in todoList">{{todo}}</li>
+            </ul>
+        </div>        
+        <script src="https://code.angularjs.org/1.5.0/angular.min.js"></script>
+        <script>
+            var myApp = angular.module('myApp', []);
+            myApp.controller('restCtrl', function ($scope, $http) {
+                $scope.todoList = [];
+                refreshList();
+
+                function refreshList() {
+                    $http.get('r/todo').success(function (data) {
+                        $scope.todoList = data;
+                    });
+                }
+
+                $scope.addItem = function () {
+                    $http.post('r/todo', {item: $scope.item}).success(refreshList);
+                };
+            });
+        </script>        
+        <ul>
+            <li><a href="index.html">Hello Angular!</a></li>
+            <li><a href="todo.html">Angular To-Do</a></li>
+            <li><a href="rest.html">RESTful To-Do</a></li>
+        </ul>
+    </body>
+</html>
