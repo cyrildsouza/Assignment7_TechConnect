@@ -16,6 +16,7 @@
 package todo;
 
 
+import java.io.StringReader;
 import javax.enterprise.context.ApplicationScoped;
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -32,12 +33,12 @@ import javax.ws.rs.Produces;
  * @author Len Payne <len.payne@lambtoncollege.ca>
  */
 @Path("todo")
-@ApplicationScoped // NOTE: This must be javax.enterprise.context.ApplicationScoped (and thus may not work on older versions of Glassfish)
+@ApplicationScoped
 public class TodoService {
     private TodoList todoList = new TodoList();
     
     @GET
-    @Produces("application/json")
+    @Produces("application/json")    
     public JsonArray getAll() {
         JsonArrayBuilder json = Json.createArrayBuilder();
         for (String todo : todoList.getTodoList()) {
@@ -47,9 +48,12 @@ public class TodoService {
     }
     
     @POST
-    @Consumes("application/json")
-    public void add(JsonObject json) {
+    @Consumes("application/json")    
+    @Produces("application/json")
+    public JsonArray add(String str) {
+        JsonObject json = Json.createReader(new StringReader(str)).readObject();
         // Expects { "item": "some todoList entry" }      
         todoList.add(json.getString("item"));
+        return getAll();
     }
 }

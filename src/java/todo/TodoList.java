@@ -23,7 +23,7 @@ import javax.enterprise.context.ApplicationScoped;
  *
  * @author Len Payne <len.payne@lambtoncollege.ca>
  */
-@ApplicationScoped // NOTE: This must be javax.enterprise.context.ApplicationScoped (and thus may not work on older versions of Glassfish)
+@ApplicationScoped
 public class TodoList {
 
     private List<String> todoList = new ArrayList<>();
